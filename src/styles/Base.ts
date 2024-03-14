@@ -14,4 +14,5 @@ export const color = {
     lg: 15,
     xlg: 16,
     xxlg: 18,
+    xxxlg: 20,
   };

@@ -24,6 +24,9 @@ const globalStyles = StyleSheet.create({
   flexDirectionRow: {
     flexDirection: 'row',
   },
+  padding10: {
+    padding: 10
+  }
 });
 
 export default globalStyles;
