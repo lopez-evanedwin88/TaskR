@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TextInput, Button as TextButton} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles/GlobalStyles';
@@ -22,7 +22,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View style={[globalStyles.flexDirectionRow, styles.txtInputStyleView]}>
         <TextInput
-          placeholder="Staff Id"
+          placeholder="Client | Staff Id"
           style={styles.txtInputStyle}
           autoCorrect={false}
           autoCapitalize={'none'}
