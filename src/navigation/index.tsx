@@ -12,9 +12,9 @@ const Stack = createNativeStackNavigator();
 function RootStack() {
   const mainStack = () => (
     <>
-      {/* <Stack.Screen name={Route.LOGIN_SCREEN} component={LoginScreen} />
-      <Stack.Screen name={Route.MAIN_SCREEN} component={MainScreen} /> */}
-      <Stack.Screen name={Route.TASK_SCREEN} component={TaskScreen} />
+      {/* <Stack.Screen name={Route.LOGIN_SCREEN} component={LoginScreen} /> */}
+      <Stack.Screen name={Route.MAIN_SCREEN} component={MainScreen} />
+      {/* <Stack.Screen name={Route.TASK_SCREEN} component={TaskScreen} /> */}
     </>
   );
 
