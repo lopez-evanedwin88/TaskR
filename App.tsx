@@ -10,12 +10,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import RootStack from './src/navigation';
+import globalStyles from './src/styles/GlobalStyles';
 
 
 
 function App(): JSX.Element {
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={globalStyles.flex1}>
         <RootStack />
       </SafeAreaView>
   );
