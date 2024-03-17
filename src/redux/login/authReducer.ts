@@ -1,6 +1,6 @@
-import { AuthActionTypes, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actions';
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actions';
 
-interface AuthState {
+export interface AuthState {
   user: any | null;
   loading: boolean;
   error: string | null;
@@ -12,7 +12,7 @@ const initialState: AuthState = {
   error: null,
 };
 
-const authReducer = (state = initialState, action: AuthActionTypes): AuthState => {
+const authReducer = (state = initialState, action: any): AuthState => {
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
