@@ -12,25 +12,26 @@ import {color} from '../../styles/Base';
 import Button from '../../component/Button';
 import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {tasksRequest} from '../../redux/task/actions';
 import {RootState} from '../../redux/types';
 import { Route } from '../../constants/Route';
+import { taskRecordsRequest } from '../../redux/taskRecord/actions';
 
 const TaskRecordScreen = ({navigation}: {navigation: any}) => {
   const [lTaskRecords, setlTaskRecords] = useState([]);
   const dispatch = useDispatch();
   const {taskRecords, loading, error} = useSelector((state: RootState) => state.taskRecord);
+  console.log('wewski');
 
   useEffect(() => {
-    handleLogin();
+    retrieveRecords();
   }, []);
 
   useEffect(() => {
     taskRecords && taskRecords.length > 0 && setlTaskRecords(taskRecords);
   }, [taskRecords]);
 
-  const handleLogin = () => {
-    dispatch(tasksRequest(5) as any);
+  const retrieveRecords = () => {
+    dispatch(taskRecordsRequest(1) as any);
   };
 
   const renderItem = ({item}: any) => (
@@ -38,12 +39,12 @@ const TaskRecordScreen = ({navigation}: {navigation: any}) => {
       <View style={globalStyles.padding8}>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
-            <Text>Message: {item.title}</Text>
+            <Text>Message: {item.message}</Text>
           </View>
         </View>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
-            <Text>Image: {item.client_id}</Text>
+            <Text>Image: {item.image_url}</Text>
           </View>
         </View>
         <View style={styles.lineStyle} />

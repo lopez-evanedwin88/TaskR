@@ -6,7 +6,7 @@ function* taskRecords(action: any):any {
   const user = yield select((state) => state.auth.user);
 
   try {
-    const response = yield call(fetch, `${BASE_URL}/task/${action.payload.userId}`, {
+    const response = yield call(fetch, `${BASE_URL}/task_record/${action.payload.task_id}`, {
       method: 'GET',
       headers: {
         'Authorization': user.token,

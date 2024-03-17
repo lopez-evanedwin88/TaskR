@@ -23,19 +23,22 @@ const MainScreen = ({navigation}: {navigation: any}) => {
   const {user} = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    handleLogin();
+    retrieveTasks();
   }, []);
 
   useEffect(() => {
     tasks && tasks.length > 0 && setlTasks(tasks);
   }, [tasks]);
 
-  const handleLogin = () => {
+  const retrieveTasks = () => {
     dispatch(tasksRequest(user.id) as any);
   };
 
   const renderItem = ({item}: any) => (
-    <TouchableOpacity onPress={() => {}}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate(Route.TASK_RECORD_SCREEN, {task_id: item.id});
+      }}>
       <View style={globalStyles.padding8}>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
