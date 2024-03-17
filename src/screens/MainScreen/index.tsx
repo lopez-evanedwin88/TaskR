@@ -14,11 +14,13 @@ import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {tasksRequest} from '../../redux/task/actions';
 import {RootState} from '../../redux/types';
+import {Route} from '../../constants/Route';
 
 const MainScreen = ({navigation}: {navigation: any}) => {
   const [lTasks, setlTasks] = useState([]);
   const dispatch = useDispatch();
-  const {tasks, loading, error} = useSelector((state: RootState) => state.task);
+  const {tasks} = useSelector((state: RootState) => state.task);
+  const {user} = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     handleLogin();
@@ -29,7 +31,7 @@ const MainScreen = ({navigation}: {navigation: any}) => {
   }, [tasks]);
 
   const handleLogin = () => {
-    dispatch(tasksRequest(5) as any);
+    dispatch(tasksRequest(user.id) as any);
   };
 
   const renderItem = ({item}: any) => (
@@ -38,12 +40,8 @@ const MainScreen = ({navigation}: {navigation: any}) => {
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
             <Text style={styles.itemViewName}>{item.name}</Text>
-            <Text style={styles.itemViewSubName}>
-              Start: {item.start_date}
-            </Text>
-            <Text style={styles.itemViewSubName}>
-              Due: {item.start_date}
-            </Text>
+            <Text style={styles.itemViewSubName}>Start: {item.start_date}</Text>
+            <Text style={styles.itemViewSubName}>Due: {item.start_date}</Text>
           </View>
         </View>
         <View style={globalStyles.flexDirectionRow}>
@@ -58,12 +56,14 @@ const MainScreen = ({navigation}: {navigation: any}) => {
         </View>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
-            <Text>Status: {item.status ? item.status: 'Not yet assigned'}</Text>
+            <Text>
+              Status: {item.status ? item.status : 'Not yet assigned'}
+            </Text>
           </View>
         </View>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
-            <Text>Medias: {item.medias}</Text>
+            <Text>Uploaded media: {item.medias}</Text>
           </View>
         </View>
         <View style={styles.lineStyle} />
@@ -101,6 +101,7 @@ const MainScreen = ({navigation}: {navigation: any}) => {
         <Button
           title="ADD | CREATE TASK"
           onPress={() => {
+            navigation.navigate(Route.TASK_SCREEN);
             // navigation.navigate(Route.ITEM_SCREEN, {mode: Mode.NEW});
           }}
         />
