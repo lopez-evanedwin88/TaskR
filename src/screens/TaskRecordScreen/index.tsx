@@ -32,6 +32,7 @@ const TaskRecordScreen = ({
   const [mediaUri, setMediaUri] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
+  const [photo, setPhoto] = useState(null);
 
   const dispatch = useDispatch();
   const {taskRecords} = useSelector((state: RootState) => state.taskRecord);
@@ -53,27 +54,18 @@ const TaskRecordScreen = ({
     dispatch(taskRecordsRequest(route.params.task_id) as any);
   };
 
-  const handleChooseMedia = () => {
-    const options = {
-      mediaType: 'mixed' as ImagePicker.MediaType, // 'photo' or 'video'
-      quality: 1 as any,
-    };
-
-    ImagePicker.launchImageLibrary(options, response => {
+  const handleChoosePhoto = () => {
+    ImagePicker.launchImageLibrary({ 'mediaType': 'mixed', 'quality': 1 }, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.errorMessage) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const selectedAsset = response.assets[0];
-        if (selectedAsset.uri) {
-          setMediaUri(selectedAsset.uri as any);
-        }
+      } else {
+        setPhoto(response as any);
+        setMediaUri((response as any).assets[0].uri);
       }
     });
   };
 
-  const handleUploadMedia = async () => {
+  const handleUploadMedia = () => {
     if (!mediaUri) {
       return;
     }
@@ -84,8 +76,8 @@ const TaskRecordScreen = ({
       dispatch(
         insertTaskRecordRequest({
           message: message,
-          mediaUri: mediaUri,
           task_id: route.params.task_id,
+          photo: photo,
         }),
       );
     } catch (error) {
@@ -164,7 +156,7 @@ const TaskRecordScreen = ({
           </View>
         </View>
         <View style={globalStyles.paddingVertical4}>
-          <Button title="Choose Media" onPress={handleChooseMedia} />
+          <Button title="Choose Media" onPress={handleChoosePhoto} />
         </View>
         <View>
           <Button

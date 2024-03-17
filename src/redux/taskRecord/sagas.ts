@@ -8,7 +8,6 @@ import {
   INSERT_TASK_RECORD_REQUEST,
 } from './actions';
 import {BASE_URL} from '../../constants/Base';
-import axios from 'axios';
 import {Platform} from 'react-native';
 
 function* taskRecords(action: any): any {
@@ -37,18 +36,30 @@ function* taskRecords(action: any): any {
   }
 }
 
+const createFormData = (photo: any, body:any = {}) => {
+  const data = new FormData();
+
+  const img = photo.assets[0];
+
+  data.append('image', {
+    name: img.fileName,
+    type: img.type,
+    uri: Platform.OS === 'ios' ? img.uri.replace('file://', '') : img.uri,
+  });
+
+  Object.keys(body).forEach(key => {
+    data.append(key, body[key]);
+  });
+
+  return data;
+};
+
 function* insertTaskRecord(action: any): any {
   const user = yield select(state => state.auth.user);
 
-  const formData = new FormData();
-  const mediaUri = action.payload.mediaUri;
-  const mediaType = mediaUri.endsWith('.mp4') ? 'video/mp4' : 'image/jpg';
-  formData.append('image', {
-    uri: mediaUri,
-    name: 'test',
-    type: mediaType,
-  });
+  const photo = action.payload.photo;
 
+  const newFormData = createFormData(photo);
   try {
     const callUpload = yield call(fetch, `${BASE_URL}/media`, {
       method: 'POST',
@@ -56,15 +67,15 @@ function* insertTaskRecord(action: any): any {
         'Content-Type': 'multipart/form-data',
         Authorization: user.token,
       },
-      body: formData,
+      body: newFormData,
     });
 
     if (!callUpload.ok) {
-      console.log('wew', callUpload);
-      throw new Error('Retrieving tasks failed');
+      throw new Error('Uploading image failed');
     }
 
     const responseImage = yield callUpload.json();
+    console.log('response', responseImage);
 
     if (responseImage.status) {
       const taskRecord = new FormData();
@@ -72,23 +83,28 @@ function* insertTaskRecord(action: any): any {
       taskRecord.append('task_id', action.payload.task_id);
       taskRecord.append('image_url', responseImage.data.url);
 
-      const callInsertRecord = yield call(fetch, `${BASE_URL}/task_record/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: user.token,
+      const callInsertRecord = yield call(
+        fetch,
+        `${BASE_URL}/task_record/create`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: user.token,
+          },
+          body: taskRecord,
         },
-      });
+      );
 
       if (!callInsertRecord.ok) {
         throw new Error('Retrieving tasks failed');
       }
 
-      const {status, response} = yield callUpload.json();
+      const {status, response} = yield callInsertRecord.json();
       yield put(insertTaskRecordSuccess({status: status, response: response}));
     }
   } catch (error) {
-    console.log('shit', (error as any).message);
+    console.log('error', (error as any));
     yield put(insertTaskRecordFailure((error as any).message));
   }
 }
