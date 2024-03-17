@@ -1,19 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   FlatList,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import globalStyles from '../../styles/GlobalStyles';
-import {color, fonts} from '../../styles/Base';
+import {color} from '../../styles/Base';
 import Button from '../../component/Button';
 import styles from './styles';
+import {useDispatch, useSelector} from 'react-redux';
+import {tasksRequest} from '../../redux/task/actions';
+import {RootState} from '../../redux/types';
 
 const MainScreen = ({navigation}: {navigation: any}) => {
-  const persons: any = [];
+  const [lTasks, setlTasks] = useState([]);
+  const dispatch = useDispatch();
+  const {tasks, loading, error} = useSelector((state: RootState) => state.task);
+
+  useEffect(() => {
+    handleLogin();
+  }, []);
+
+  useEffect(() => {
+    tasks && tasks.length > 0 && setlTasks(tasks);
+  }, [tasks]);
+
+  const handleLogin = () => {
+    dispatch(tasksRequest(5) as any);
+  };
 
   const renderItem = ({item}: any) => (
     <TouchableOpacity onPress={() => {}}>
@@ -22,18 +39,31 @@ const MainScreen = ({navigation}: {navigation: any}) => {
           <View style={styles.itemViews}>
             <Text style={styles.itemViewName}>{item.name}</Text>
             <Text style={styles.itemViewSubName}>
-              {item.occupation} @ {item.company}
+              Start: {item.start_date}
+            </Text>
+            <Text style={styles.itemViewSubName}>
+              Due: {item.start_date}
             </Text>
           </View>
         </View>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
-            <Text>{item.email_address}</Text>
+            <Text>Title: {item.title}</Text>
           </View>
         </View>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
-            <Text>{item.phone_number}</Text>
+            <Text>Client: {item.client_id}</Text>
+          </View>
+        </View>
+        <View style={globalStyles.flexDirectionRow}>
+          <View style={styles.itemViews}>
+            <Text>Status: {item.status ? item.status: 'Not yet assigned'}</Text>
+          </View>
+        </View>
+        <View style={globalStyles.flexDirectionRow}>
+          <View style={styles.itemViews}>
+            <Text>Medias: {item.medias}</Text>
           </View>
         </View>
         <View style={styles.lineStyle} />
@@ -43,12 +73,12 @@ const MainScreen = ({navigation}: {navigation: any}) => {
 
   return (
     <View style={[globalStyles.flex1, {backgroundColor: color.white}]}>
-      {persons.length !== 0 ? (
+      {lTasks.length !== 0 ? (
         <FlatList
           refreshing={false}
           scrollEnabled={true}
           style={[globalStyles.width100p]}
-          data={persons}
+          data={lTasks}
           onEndReached={() => {}}
           onEndReachedThreshold={0}
           renderItem={renderItem}
