@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, Button as TextButton} from 'react-native';
+import {View, Text, TextInput, Button as TextButton, Alert} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles/GlobalStyles';
 import {fonts} from '../../styles/Base';
@@ -16,6 +16,16 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
   const {user, loading, error} = useSelector((state: RootState) => state.auth);
 
   const handleLogin = () => {
+    //Added basic validation
+    if (!staff_id) {
+      Alert.alert('Field Required', 'Please enter staff id');
+      return;
+    }
+    if (!password) {
+      Alert.alert('Field Required', 'Please enter password');
+      return;
+    }
+
     dispatch(loginRequest(staff_id, password) as any);
   };
 
@@ -24,6 +34,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       navigation.navigate(Route.MAIN_SCREEN);
     }
   }, [user]);
+  
 
   return (
     <View
