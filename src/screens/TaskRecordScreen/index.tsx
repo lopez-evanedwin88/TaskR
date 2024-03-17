@@ -6,6 +6,8 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  Image,
+  TextInput,
 } from 'react-native';
 import globalStyles from '../../styles/GlobalStyles';
 import {color} from '../../styles/Base';
@@ -13,14 +15,31 @@ import Button from '../../component/Button';
 import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/types';
-import { Route } from '../../constants/Route';
-import { taskRecordsRequest } from '../../redux/taskRecord/actions';
+import {
+  insertTaskRecordRequest,
+  taskRecordsRequest,
+} from '../../redux/taskRecord/actions';
+import * as ImagePicker from 'react-native-image-picker';
 
-const TaskRecordScreen = ({navigation}: {navigation: any}) => {
+const TaskRecordScreen = ({
+  navigation,
+  route,
+}: {
+  navigation: any;
+  route: any;
+}) => {
   const [lTaskRecords, setlTaskRecords] = useState([]);
+  const [mediaUri, setMediaUri] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState('');
+
   const dispatch = useDispatch();
-  const {taskRecords, loading, error} = useSelector((state: RootState) => state.taskRecord);
-  console.log('wewski');
+  const {taskRecords} = useSelector((state: RootState) => state.taskRecord);
+  const {} = useSelector((state: RootState) => state.taskRecord);
+
+  useEffect(() => {
+    navigation.setOptions({title: ''});
+  }, [navigation, route]);
 
   useEffect(() => {
     retrieveRecords();
@@ -31,7 +50,50 @@ const TaskRecordScreen = ({navigation}: {navigation: any}) => {
   }, [taskRecords]);
 
   const retrieveRecords = () => {
-    dispatch(taskRecordsRequest(1) as any);
+    dispatch(taskRecordsRequest(route.params.task_id) as any);
+  };
+
+  const handleChooseMedia = () => {
+    const options = {
+      mediaType: 'mixed' as ImagePicker.MediaType, // 'photo' or 'video'
+      quality: 1 as any,
+    };
+
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorMessage) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        const selectedAsset = response.assets[0];
+        if (selectedAsset.uri) {
+          setMediaUri(selectedAsset.uri as any);
+        }
+      }
+    });
+  };
+
+  const handleUploadMedia = async () => {
+    if (!mediaUri) {
+      return;
+    }
+
+    try {
+      setUploading(true);
+      // Handle successful upload
+      dispatch(
+        insertTaskRecordRequest({
+          message: message,
+          mediaUri: mediaUri,
+          task_id: route.params.task_id,
+        }),
+      );
+    } catch (error) {
+      // Handle upload error
+      console.error('Upload error:', (error as any).message);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const renderItem = ({item}: any) => (
@@ -75,17 +137,45 @@ const TaskRecordScreen = ({navigation}: {navigation: any}) => {
         />
       ) : (
         <View style={styles.emptyTextStyleView}>
-          <Text style={styles.emptyTextStyle}>Task list is empty</Text>
+          <Text style={styles.emptyTextStyle}>Task records is empty</Text>
         </View>
       )}
       <View style={styles.btnBusinessStyle}>
-        <Button
-          title="ADD | CREATE TASK"
-          onPress={() => {
-            navigation.navigate(Route.TASK_SCREEN);
-            // navigation.navigate(Route.ITEM_SCREEN, {mode: Mode.NEW});
-          }}
-        />
+        <View style={{width: 'auto', flexDirection: 'row'}}>
+          <View
+            style={[
+              globalStyles.flexDirectionRow,
+              globalStyles.paddingVertical4,
+              {width: '70%'},
+            ]}>
+            <TextInput
+              placeholder="Message"
+              style={styles.txtInputStyle}
+              autoCorrect={false}
+              autoCapitalize={'none'}
+              value={message}
+              onChangeText={setMessage}
+            />
+          </View>
+          <View>
+            {mediaUri && (
+              <Image source={{uri: mediaUri}} style={styles.media} />
+            )}
+          </View>
+        </View>
+        <View style={globalStyles.paddingVertical4}>
+          <Button title="Choose Media" onPress={handleChooseMedia} />
+        </View>
+        <View>
+          <Button
+            title="Update Task"
+            disabled={!mediaUri || uploading}
+            onPress={() => {
+              handleUploadMedia();
+              // navigation.navigate(Route.TASK_SCREEN);
+            }}
+          />
+        </View>
       </View>
     </View>
   );

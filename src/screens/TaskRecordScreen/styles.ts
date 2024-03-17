@@ -33,6 +33,24 @@ const styles = StyleSheet.create({
     fontSize: fonts.lg,
     color: color.gray,
   },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  media: {
+    width: 100,
+    height: 100,
+    marginBottom: 5,
+    alignSelf: 'flex-end',
+  },
+  txtInputStyle: {
+    marginHorizontal: 16,
+    borderBottomWidth: 0.3,
+    flex: 1,
+    fontSize: fonts.xlg,
+    padding: 10,
+  },
 });
 
 export default styles;

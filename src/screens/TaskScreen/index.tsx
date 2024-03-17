@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -27,6 +27,10 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
     let formattedDate = moment(date).format(dateFormatter);
     whichDatePicked ? setStartDate(formattedDate) : setEndDate(formattedDate);
   };
+
+  useEffect(() => {
+    navigation.setOptions({title: ''});
+  }, [navigation]);
 
   return (
     <View

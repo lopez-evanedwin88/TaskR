@@ -10,8 +10,8 @@ import {loginRequest} from '../../redux/login/actions';
 import { Route } from '../../constants/Route';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
-  const [staff_id, setStaffId] = useState('');
-  const [password, setPassword] = useState('');
+  const [staff_id, setStaffId] = useState('grainbird4@google.com.br');
+  const [password, setPassword] = useState('test123');
   const dispatch = useDispatch();
   const {user, loading, error} = useSelector((state: RootState) => state.auth);
 
