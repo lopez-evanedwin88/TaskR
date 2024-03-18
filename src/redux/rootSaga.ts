@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
 import { watchLogin } from './login/sagas';
-import { watchTasks } from './task/sagas';
+import { watchInsertTask, watchTasks } from './task/sagas';
 import { watchInsertTaskRecord, watchTaskRecords } from './taskRecord/sagas';
 
 export default function* rootSaga() {
@@ -9,5 +9,6 @@ export default function* rootSaga() {
    watchTasks(),
    watchTaskRecords(),
    watchInsertTaskRecord(),
+   watchInsertTask(),
   ]);
 }
