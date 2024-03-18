@@ -9,9 +9,10 @@ import {
   Image,
   TextInput,
   Alert,
+  Button as TextButton,
 } from 'react-native';
 import globalStyles from '../../styles/GlobalStyles';
-import {color} from '../../styles/Base';
+import {color, fonts} from '../../styles/Base';
 import Button from '../../component/Button';
 import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
@@ -145,32 +146,43 @@ const TaskRecordScreen = ({
           <Text style={styles.emptyTextStyle}>Task records is empty</Text>
         </View>
       )}
+      <View
+        style={[
+          {alignSelf: 'flex-start', paddingLeft: 20, alignItems: 'center'},
+          globalStyles.padding10,
+          globalStyles.flexDirectionRow,
+        ]}>
+        <Text style={[{fontSize: fonts.xxlg}]}>Upload Image:</Text>
+        <TextButton
+          title="+"
+          onPress={() => {
+            handleChoosePhoto();
+          }}
+        />
+      </View>
+      <View
+        style={{
+          alignSelf: 'flex-start',
+          paddingLeft: 20,
+        }}>
+        {mediaUri && <Image source={{uri: mediaUri}} style={styles.media} />}
+      </View>
+      <View
+          style={[
+            globalStyles.flexDirectionRow,
+            globalStyles.paddingVertical4,
+            {paddingHorizontal: 10}
+          ]}>
+          <TextInput
+            placeholder="Message"
+            style={styles.txtInputStyle}
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            value={message}
+            onChangeText={setMessage}
+          />
+        </View>
       <View style={styles.btnBusinessStyle}>
-        <View style={{width: 'auto', flexDirection: 'row'}}>
-          <View
-            style={[
-              globalStyles.flexDirectionRow,
-              globalStyles.paddingVertical4,
-              {width: '70%'},
-            ]}>
-            <TextInput
-              placeholder="Message"
-              style={styles.txtInputStyle}
-              autoCorrect={false}
-              autoCapitalize={'none'}
-              value={message}
-              onChangeText={setMessage}
-            />
-          </View>
-          <View>
-            {mediaUri && (
-              <Image source={{uri: mediaUri}} style={styles.media} />
-            )}
-          </View>
-        </View>
-        <View style={globalStyles.paddingVertical4}>
-          <Button title="Choose Media" onPress={handleChoosePhoto} />
-        </View>
         <View>
           <Button
             title="Update Task"
