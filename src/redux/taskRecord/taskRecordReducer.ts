@@ -7,23 +7,23 @@ import {
   INSERT_TASK_RECORD_FAILURE,
 } from './actions';
 
-export interface TaskRecord {
-  taskRecords: [] | null;
+export interface TaskRecordState {
+  taskRecords: [];
   loading: boolean;
   error: string | null;
   status: string | null;
   response: string | null;
 }
 
-const initialState: TaskRecord = {
-  taskRecords: null,
+const initialState: TaskRecordState = {
+  taskRecords: [],
   loading: false,
   error: null,
   status: null,
   response: null,
 };
 
-const taskRecordReducer = (state = initialState, action: any): TaskRecord => {
+const taskRecordReducer = (state = initialState, action: any): TaskRecordState => {
   switch (action.type) {
     case TASK_RECORDS_REQUEST:
       return {

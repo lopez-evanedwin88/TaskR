@@ -35,3 +35,8 @@ export const insertTaskRecordFailure = (error: string) => ({
   type: INSERT_TASK_RECORD_FAILURE,
   payload: error,
 });
+
+
+export const setInitialState = () => ({
+  type: '',
+})
