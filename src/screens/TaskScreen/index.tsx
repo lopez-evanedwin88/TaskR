@@ -5,6 +5,7 @@ import {
   TextInput,
   Button as TextButton,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import externalStyle1 from '../LoginScreen/styles';
 import globalStyles from '../../styles/GlobalStyles';
@@ -14,14 +15,23 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../redux/types';
+import {insertTaskRequest} from '../../redux/task/actions';
 
 const TaskScreen = ({navigation}: {navigation: any}) => {
   const dateFormatter = 'Y-MM-DD HH:mm';
   const [startDate, setStartDate] = useState(moment().format(dateFormatter));
   const [endDate, setEndDate] = useState(moment().format(dateFormatter));
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [displayPicker, setDisplayPicker] = useState(false);
   const [whichDatePicked, setWhichDatePicked] = useState(true);
   const [selectedDate, setSelectedDate] = useState('');
+
+  const dispatch = useDispatch();
+  const {user} = useSelector((state: RootState) => state.auth);
+  const {status, response} = useSelector((state: RootState) => state.task);
 
   const setDate = (event: DateTimePickerEvent, date?: Date) => {
     let formattedDate = moment(date).format(dateFormatter);
@@ -31,6 +41,27 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
   useEffect(() => {
     navigation.setOptions({title: ''});
   }, [navigation]);
+
+  useEffect(() => {
+    if(response) {
+      Alert.alert('Task created', 'Task has been successfully created!');
+      navigation.goBack();
+    }
+  }, [status, response]);
+
+  const insertTaskApi = () => {
+    dispatch(
+      insertTaskRequest({
+        client_id: user.staff_id,
+        start_date: startDate,
+        due_date: endDate,
+        title: title,
+        description: description,
+        message: description,
+        image_url: '',
+      }) as any,
+    );
+  };
 
   return (
     <View
@@ -56,6 +87,8 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
           style={externalStyle1.txtInputStyle}
           autoCorrect={false}
           autoCapitalize={'none'}
+          value={title}
+          onChangeText={setTitle}
         />
       </View>
       <View
@@ -68,6 +101,8 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
           style={externalStyle1.txtInputStyle}
           autoCorrect={false}
           autoCapitalize={'none'}
+          value={description}
+          onChangeText={setDescription}
         />
       </View>
       <View
@@ -142,7 +177,13 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
         </>
       )}
       <View style={[globalStyles.padding8, globalStyles.flexDirectionRow]}>
-        <Button title="Create" onPress={() => {}} style={globalStyles.flex1} />
+        <Button
+          title="Create"
+          onPress={() => {
+            insertTaskApi();
+          }}
+          style={globalStyles.flex1}
+        />
       </View>
     </View>
   );

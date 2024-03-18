@@ -36,7 +36,6 @@ const TaskRecordScreen = ({
 
   const dispatch = useDispatch();
   const {taskRecords} = useSelector((state: RootState) => state.taskRecord);
-  const {} = useSelector((state: RootState) => state.taskRecord);
 
   useEffect(() => {
     navigation.setOptions({title: ''});
@@ -47,6 +46,7 @@ const TaskRecordScreen = ({
   }, []);
 
   useEffect(() => {
+    setlTaskRecords([]);
     taskRecords && taskRecords.length > 0 && setlTaskRecords(taskRecords);
   }, [taskRecords]);
 
