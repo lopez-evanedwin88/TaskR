@@ -7,7 +7,7 @@ import Button from '../../component/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/types';
 import {loginRequest} from '../../redux/login/actions';
-import { Route } from '../../constants/Route';
+import {Route} from '../../constants/Route';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
   // const [staff_id, setStaffId] = useState('005');
@@ -36,7 +36,6 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       navigation.navigate(Route.MAIN_SCREEN);
     }
   }, [user]);
-  
 
   return (
     <View
@@ -74,13 +73,25 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
         />
       </View>
       <View style={[globalStyles.padding8, globalStyles.flexDirectionRow]}>
-        <Button title="Sign in" onPress={handleLogin} style={globalStyles.flex1} />
+        <Button
+          title="Sign in"
+          onPress={handleLogin}
+          style={globalStyles.flex1}
+        />
       </View>
       <View style={[globalStyles.padding8, globalStyles.flexDirectionRow]}>
         <Text style={[{fontSize: fonts.xxlg, alignSelf: 'center'}]}>
           Don't have an account?
         </Text>
-        <TextButton title="Create yours now" />
+        <TextButton
+          title="Create yours now"
+          onPress={() => {
+            Alert.alert(
+              'Not yet supported',
+              'This feature is not yet supported. Contact the developer for more info',
+            );
+          }}
+        />
       </View>
     </View>
   );
