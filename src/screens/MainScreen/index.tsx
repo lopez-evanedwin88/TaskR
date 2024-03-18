@@ -37,24 +37,32 @@ const MainScreen = ({navigation}: {navigation: any}) => {
 
   const initClearResponse = () => {
     dispatch(clearResponse());
-  }
+  };
 
   const initClearResponseTask = () => {
     dispatch(clearResponseTaskRecord());
-  }
+  };
 
   const renderItem = ({item}: any) => (
     <TouchableOpacity
       onPress={() => {
         initClearResponseTask();
-        navigation.navigate(Route.TASK_RECORD_SCREEN, {task_id: item.id});
+        navigation.navigate(Route.TASK_RECORD_SCREEN, {
+          task_id: item.id,
+          status: item.status,
+          title: item.title,
+          description: item.description,
+          assignee_id: item.assignee_id,
+          start_date: item.start_date,
+          due_date: item.due_date,
+        });
       }}>
       <View style={globalStyles.padding8}>
         <View style={globalStyles.flexDirectionRow}>
           <View style={styles.itemViews}>
             <Text style={styles.itemViewName}>{item.name}</Text>
             <Text style={styles.itemViewSubName}>Start: {item.start_date}</Text>
-            <Text style={styles.itemViewSubName}>Due: {item.start_date}</Text>
+            <Text style={styles.itemViewSubName}>Due: {item.due_date}</Text>
           </View>
         </View>
         <View style={globalStyles.flexDirectionRow}>
