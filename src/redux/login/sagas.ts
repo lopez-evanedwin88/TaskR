@@ -5,7 +5,7 @@ import { BASE_URL } from '../../constants/Base';
 function* login(action: any):any {
   try {
     const formData = new FormData();
-    formData.append('email', action.payload.staff_id);
+    formData.append('staff_id', action.payload.staff_id);
     formData.append('password', action.payload.password);
 
     const response = yield call(fetch, `${BASE_URL}/login`, {

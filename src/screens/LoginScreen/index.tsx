@@ -54,7 +54,7 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
       </View>
       <View style={[globalStyles.flexDirectionRow, styles.txtInputStyleView]}>
         <TextInput
-          placeholder="Client | Staff Id"
+          placeholder="Staff Id"
           style={styles.txtInputStyle}
           autoCorrect={false}
           autoCapitalize={'none'}
