@@ -22,6 +22,8 @@ import {
   taskRecordsRequest,
 } from '../../redux/taskRecord/actions';
 import * as ImagePicker from 'react-native-image-picker';
+import {updateTaskStatusRequest} from '../../redux/task/actions';
+import {Status} from '../../constants/Status';
 
 const TaskRecordScreen = ({
   navigation,
@@ -35,11 +37,13 @@ const TaskRecordScreen = ({
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
   const [photo, setPhoto] = useState(null);
+  const [toggleDetails, setToggleDetails] = useState(true);
 
   const dispatch = useDispatch();
   const {taskRecords, status, response} = useSelector(
     (state: RootState) => state.taskRecord,
   );
+  const {user} = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     navigation.setOptions({title: ''});
@@ -98,6 +102,16 @@ const TaskRecordScreen = ({
     }
   };
 
+  const assignTask = (assignee_id: string) => {
+    dispatch(
+      updateTaskStatusRequest({
+        status: Status.IN_PROGRESS,
+        task_id: route.params.task_id,
+        assignee_id: assignee_id,
+      }),
+    );
+  };
+
   const renderItem = ({item}: any) => (
     <TouchableOpacity onPress={() => {}}>
       <View style={globalStyles.padding8}>
@@ -142,13 +156,72 @@ const TaskRecordScreen = ({
           <Text style={styles.emptyTextStyle}>Task records is empty</Text>
         </View>
       )}
+      {route.params.status === Status.PENDING && user.role === 'Admin' && (
+        <View
+          style={[
+            {alignSelf: 'flex-start', paddingLeft: 20, alignItems: 'center'},
+            globalStyles.flexDirectionRow,
+          ]}>
+          <Text style={[{fontSize: fonts.lg, fontWeight: 'bold'}]}>
+            This task was not assign yet:
+          </Text>
+          <TextButton
+            title="Assign here."
+            onPress={() => {
+              Alert.prompt(
+                'Enter assignee',
+                'Enter assignee id to assign this task',
+                [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'OK',
+                    onPress: text => assignTask(text as string),
+                  },
+                ],
+              );
+            }}
+          />
+        </View>
+      )}
+
+      <View
+        style={[
+          {alignSelf: 'flex-start', paddingLeft: 10, alignItems: 'flex-start'},
+        ]}>
+        <TextButton
+          title={`${toggleDetails ? '+Show' : '-Hide'} task details`}
+          onPress={() => setToggleDetails(!toggleDetails)}
+        />
+        {!toggleDetails && (
+          <View style={globalStyles.padding8}>
+            <Text style={[{fontSize: fonts.lg}]}>
+              Title: {route.params.title}
+            </Text>
+            <Text style={[{fontSize: fonts.lg}]}>
+              Description: {route.params.description}
+            </Text>
+            <Text style={[{fontSize: fonts.lg}]}>
+              Assigned to: {route.params.assignee_id}
+            </Text>
+            <Text style={[{fontSize: fonts.lg}]}>
+              Start Date: {route.params.start_date}
+            </Text>
+            <Text style={[{fontSize: fonts.lg}]}>
+              Due Date: {route.params.due_date}
+            </Text>
+          </View>
+        )}
+      </View>
       <View
         style={[
           {alignSelf: 'flex-start', paddingLeft: 20, alignItems: 'center'},
-          globalStyles.padding10,
           globalStyles.flexDirectionRow,
         ]}>
-        <Text style={[{fontSize: fonts.xxlg}]}>Upload Image:</Text>
+        <Text style={[{fontSize: fonts.lg}]}>Upload Image:</Text>
         <TextButton
           title="+"
           onPress={() => {
@@ -163,21 +236,16 @@ const TaskRecordScreen = ({
         }}>
         {mediaUri && <Image source={{uri: mediaUri}} style={styles.media} />}
       </View>
-      <View
-          style={[
-            globalStyles.flexDirectionRow,
-            globalStyles.paddingVertical4,
-            {paddingHorizontal: 10}
-          ]}>
-          <TextInput
-            placeholder="Message"
-            style={styles.txtInputStyle}
-            autoCorrect={false}
-            autoCapitalize={'none'}
-            value={message}
-            onChangeText={setMessage}
-          />
-        </View>
+      <View style={[globalStyles.flexDirectionRow, {paddingHorizontal: 10}]}>
+        <TextInput
+          placeholder="Message"
+          style={styles.txtInputStyle}
+          autoCorrect={false}
+          autoCapitalize={'none'}
+          value={message}
+          onChangeText={setMessage}
+        />
+      </View>
       <View style={styles.btnBusinessStyle}>
         <View>
           <Button
