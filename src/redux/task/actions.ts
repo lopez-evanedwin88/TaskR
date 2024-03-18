@@ -6,6 +6,10 @@ export const INSERT_TASK_REQUEST = 'INSERT_TASK_REQUEST';
 export const INSERT_TASK_SUCCESS = 'INSERT_TASK_SUCCESS';
 export const INSERT_TASK_FAILURE = 'INSERT_TASK_FAILURE';
 
+export const UPDATE_TASK_STATUS_REQUEST = 'UPDATE_TASK_STATUS_REQUEST';
+export const UPDATE_TASK_STATUS_SUCCESS = 'UPDATE_TASK_STATUS_SUCCESS';
+export const UPDATE_TASK_STATUS_FAILURE = 'UPDATE_TASK_STATUS_FAILURE';
+
 export const CLEAR_RESPONSE = 'CLEAR_RESPONSE_STATE';
 
 export const tasksRequest = (userId: number) => ({
@@ -35,6 +39,21 @@ export const insertTaskSuccess = (response: any) => ({
 
 export const insertTaskFailure = (error: string) => ({
   type: INSERT_TASK_FAILURE,
+  payload: error,
+});
+
+export const updateTaskStatusRequest = (task: any) => ({
+  type: UPDATE_TASK_STATUS_REQUEST,
+  payload: task,
+});
+
+export const updateTaskStatusSuccess = (response: any) => ({
+  type: UPDATE_TASK_STATUS_SUCCESS,
+  payload: response,
+});
+
+export const updateTaskStatusFailure = (error: string) => ({
+  type: UPDATE_TASK_STATUS_FAILURE,
   payload: error,
 });
 

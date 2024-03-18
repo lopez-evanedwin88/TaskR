@@ -5,6 +5,9 @@ import {
   INSERT_TASK_SUCCESS,
   INSERT_TASK_REQUEST,
   INSERT_TASK_FAILURE,
+  UPDATE_TASK_STATUS_REQUEST,
+  UPDATE_TASK_STATUS_SUCCESS,
+  UPDATE_TASK_STATUS_FAILURE,
   CLEAR_RESPONSE,
 } from './actions';
 
@@ -59,6 +62,29 @@ const taskReducer = (state = initialState, action: any): TaskState => {
         error: null,
       };
     case INSERT_TASK_FAILURE:
+      return {
+        ...state,
+        status: action.payload.status,
+        response: action.payload.response,
+        loading: false,
+        error: action.payload,
+      };
+
+    case UPDATE_TASK_STATUS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case UPDATE_TASK_STATUS_SUCCESS:
+      return {
+        ...state,
+        status: action.payload.status,
+        response: action.payload.response,
+        loading: false,
+        error: null,
+      };
+    case UPDATE_TASK_STATUS_FAILURE:
       return {
         ...state,
         status: action.payload.status,
