@@ -12,7 +12,7 @@ import {color} from '../../styles/Base';
 import Button from '../../component/Button';
 import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {tasksRequest} from '../../redux/task/actions';
+import {clearResponse, tasksRequest} from '../../redux/task/actions';
 import {RootState} from '../../redux/types';
 import {Route} from '../../constants/Route';
 
@@ -33,6 +33,10 @@ const MainScreen = ({navigation}: {navigation: any}) => {
   const retrieveTasks = () => {
     dispatch(tasksRequest(user.id) as any);
   };
+
+  const initClearResponse = () => {
+    dispatch(clearResponse());
+  }
 
   const renderItem = ({item}: any) => (
     <TouchableOpacity
@@ -100,15 +104,18 @@ const MainScreen = ({navigation}: {navigation: any}) => {
           <Text style={styles.emptyTextStyle}>Task list is empty</Text>
         </View>
       )}
-      <View style={styles.btnBusinessStyle}>
-        <Button
-          title="ADD | CREATE TASK"
-          onPress={() => {
-            navigation.navigate(Route.TASK_SCREEN);
-            // navigation.navigate(Route.ITEM_SCREEN, {mode: Mode.NEW});
-          }}
-        />
-      </View>
+      {user.role === 'Client' && (
+        <View style={styles.btnBusinessStyle}>
+          <Button
+            title="ADD | CREATE TASK"
+            onPress={() => {
+              initClearResponse();
+              navigation.navigate(Route.TASK_SCREEN);
+              // navigation.navigate(Route.ITEM_SCREEN, {mode: Mode.NEW});
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
