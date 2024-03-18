@@ -5,13 +5,14 @@ import {
   INSERT_TASK_RECORD_REQUEST,
   INSERT_TASK_RECORD_SUCCESS,
   INSERT_TASK_RECORD_FAILURE,
+  CLEAR_RESPONSE,
 } from './actions';
 
 export interface TaskRecordState {
   taskRecords: [];
   loading: boolean;
   error: string | null;
-  status: string | null;
+  status: any | null;
   response: string | null;
 }
 
@@ -23,7 +24,10 @@ const initialState: TaskRecordState = {
   response: null,
 };
 
-const taskRecordReducer = (state = initialState, action: any): TaskRecordState => {
+const taskRecordReducer = (
+  state = initialState,
+  action: any,
+): TaskRecordState => {
   switch (action.type) {
     case TASK_RECORDS_REQUEST:
       return {
@@ -64,6 +68,12 @@ const taskRecordReducer = (state = initialState, action: any): TaskRecordState =
         response: action.payload.response,
         loading: false,
         error: action.payload,
+      };
+    case CLEAR_RESPONSE:
+      return {
+        ...state,
+        status: null,
+        response: null,
       };
     default:
       return state;

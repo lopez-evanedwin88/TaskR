@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   TextInput,
+  Alert,
 } from 'react-native';
 import globalStyles from '../../styles/GlobalStyles';
 import {color} from '../../styles/Base';
@@ -35,7 +36,9 @@ const TaskRecordScreen = ({
   const [photo, setPhoto] = useState(null);
 
   const dispatch = useDispatch();
-  const {taskRecords} = useSelector((state: RootState) => state.taskRecord);
+  const {taskRecords, status, response} = useSelector(
+    (state: RootState) => state.taskRecord,
+  );
 
   useEffect(() => {
     navigation.setOptions({title: ''});
@@ -44,6 +47,13 @@ const TaskRecordScreen = ({
   useEffect(() => {
     retrieveRecords();
   }, []);
+
+  useEffect(() => {
+    if (status === 200) {
+      Alert.alert('Updated the task', response as string);
+      navigation.goBack();
+    }
+  }, [status, response]);
 
   useEffect(() => {
     setlTaskRecords([]);
@@ -55,14 +65,17 @@ const TaskRecordScreen = ({
   };
 
   const handleChoosePhoto = () => {
-    ImagePicker.launchImageLibrary({ 'mediaType': 'mixed', 'quality': 1 }, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else {
-        setPhoto(response as any);
-        setMediaUri((response as any).assets[0].uri);
-      }
-    });
+    ImagePicker.launchImageLibrary(
+      {mediaType: 'mixed', quality: 1},
+      response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else {
+          setPhoto(response as any);
+          setMediaUri((response as any).assets[0].uri);
+        }
+      },
+    );
   };
 
   const handleUploadMedia = () => {

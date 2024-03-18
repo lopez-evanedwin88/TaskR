@@ -6,6 +6,8 @@ export const INSERT_TASK_RECORD_REQUEST = 'INSERT_TASK_RECORD_REQUEST';
 export const INSERT_TASK_RECORD_SUCCESS = 'INSERT_TASK_RECORD_SUCCESS';
 export const INSERT_TASK_RECORD_FAILURE = 'INSERT_TASK_RECORD_FAILURE';
 
+export const CLEAR_RESPONSE = 'CLEAR_RESPONSE_STATE';
+
 export const taskRecordsRequest = (task_id: number) => ({
   type: TASK_RECORDS_REQUEST,
   payload: {task_id},
@@ -36,6 +38,9 @@ export const insertTaskRecordFailure = (error: string) => ({
   payload: error,
 });
 
+export const clearResponse = () => ({
+  type: CLEAR_RESPONSE,
+});
 
 export const setInitialState = () => ({
   type: '',

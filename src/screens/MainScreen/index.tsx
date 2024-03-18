@@ -13,6 +13,7 @@ import Button from '../../component/Button';
 import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {clearResponse, tasksRequest} from '../../redux/task/actions';
+import {clearResponse as clearResponseTaskRecord} from '../../redux/taskRecord/actions';
 import {RootState} from '../../redux/types';
 import {Route} from '../../constants/Route';
 
@@ -38,9 +39,14 @@ const MainScreen = ({navigation}: {navigation: any}) => {
     dispatch(clearResponse());
   }
 
+  const initClearResponseTask = () => {
+    dispatch(clearResponseTaskRecord());
+  }
+
   const renderItem = ({item}: any) => (
     <TouchableOpacity
       onPress={() => {
+        initClearResponseTask();
         navigation.navigate(Route.TASK_RECORD_SCREEN, {task_id: item.id});
       }}>
       <View style={globalStyles.padding8}>
