@@ -6,6 +6,7 @@ import {
   Button as TextButton,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 import externalStyle1 from '../LoginScreen/styles';
 import globalStyles from '../../styles/GlobalStyles';
@@ -18,6 +19,8 @@ import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/types';
 import {insertTaskRequest} from '../../redux/task/actions';
+import * as ImagePicker from 'react-native-image-picker';
+import styles from './styles';
 
 const TaskScreen = ({navigation}: {navigation: any}) => {
   const dateFormatter = 'Y-MM-DD HH:mm';
@@ -28,6 +31,8 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
   const [displayPicker, setDisplayPicker] = useState(false);
   const [whichDatePicked, setWhichDatePicked] = useState(true);
   const [selectedDate, setSelectedDate] = useState('');
+  const [mediaUri, setMediaUri] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
   const dispatch = useDispatch();
   const {user} = useSelector((state: RootState) => state.auth);
@@ -43,7 +48,7 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
   }, [navigation]);
 
   useEffect(() => {
-    if(response) {
+    if (response) {
       Alert.alert('Task created', 'Task has been successfully created!');
       navigation.goBack();
     }
@@ -59,7 +64,22 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
         description: description,
         message: description,
         image_url: '',
+        photo: photo,
       }) as any,
+    );
+  };
+
+  const handleChoosePhoto = () => {
+    ImagePicker.launchImageLibrary(
+      {mediaType: 'mixed', quality: 1},
+      response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else {
+          setPhoto(response as any);
+          setMediaUri((response as any).assets[0].uri);
+        }
+      },
     );
   };
 
@@ -112,7 +132,19 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
           globalStyles.flexDirectionRow,
         ]}>
         <Text style={[{fontSize: fonts.xxlg}]}>Upload Image:</Text>
-        <TextButton title="+" />
+        <TextButton
+          title="+"
+          onPress={() => {
+            handleChoosePhoto();
+          }}
+        />
+      </View>
+      <View
+        style={{
+          alignSelf: 'flex-start',
+          paddingLeft: 20,
+        }}>
+        {mediaUri && <Image source={{uri: mediaUri}} style={styles.media} />}
       </View>
       <View
         style={[

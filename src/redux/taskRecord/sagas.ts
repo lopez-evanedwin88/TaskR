@@ -8,7 +8,7 @@ import {
   INSERT_TASK_RECORD_REQUEST,
 } from './actions';
 import {BASE_URL} from '../../constants/Base';
-import {Platform} from 'react-native';
+import {createFormData} from '../../util/util';
 
 function* taskRecords(action: any): any {
   const user = yield select(state => state.auth.user);
@@ -35,24 +35,6 @@ function* taskRecords(action: any): any {
     yield put(taskRecordsFailure((error as any).message));
   }
 }
-
-const createFormData = (photo: any, body:any = {}) => {
-  const data = new FormData();
-
-  const img = photo.assets[0];
-
-  data.append('image', {
-    name: img.fileName,
-    type: img.type,
-    uri: Platform.OS === 'ios' ? img.uri.replace('file://', '') : img.uri,
-  });
-
-  Object.keys(body).forEach(key => {
-    data.append(key, body[key]);
-  });
-
-  return data;
-};
 
 function* insertTaskRecord(action: any): any {
   const user = yield select(state => state.auth.user);
@@ -104,7 +86,7 @@ function* insertTaskRecord(action: any): any {
       yield put(insertTaskRecordSuccess({status: status, response: response}));
     }
   } catch (error) {
-    console.log('error', (error as any));
+    console.log('error', error as any);
     yield put(insertTaskRecordFailure((error as any).message));
   }
 }
