@@ -80,10 +80,6 @@ const TaskRecordScreen = ({
   };
 
   const handleUploadMedia = () => {
-    if (!mediaUri) {
-      return;
-    }
-
     try {
       setUploading(true);
       // Handle successful upload
@@ -186,7 +182,7 @@ const TaskRecordScreen = ({
         <View>
           <Button
             title="Update Task"
-            disabled={!mediaUri || uploading}
+            disabled={uploading}
             onPress={() => {
               handleUploadMedia();
               // navigation.navigate(Route.TASK_SCREEN);

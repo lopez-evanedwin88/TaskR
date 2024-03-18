@@ -18,7 +18,7 @@ import DateTimePicker, {
 import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/types';
-import {insertTaskRequest} from '../../redux/task/actions';
+import {insertTaskRequest, tasksRequest} from '../../redux/task/actions';
 import * as ImagePicker from 'react-native-image-picker';
 import styles from './styles';
 
@@ -50,6 +50,7 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
   useEffect(() => {
     if (response) {
       Alert.alert('Task created', 'Task has been successfully created!');
+      dispatch(tasksRequest(user.id) as any);
       navigation.goBack();
     }
   }, [status, response]);
