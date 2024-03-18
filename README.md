@@ -19,6 +19,9 @@ npm start
 
 # OR using Yarn
 yarn start
+
+#In case localhost:8080 is already in use
+npx react-native start --port=8082
 ```
 
 ## Step 2: Start your Application
@@ -43,6 +46,9 @@ npm run ios
 
 # OR using Yarn
 yarn ios
+
+#In case localhost:8080 is already in use
+npx react-native start --port=8082
 ```
 
 If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
