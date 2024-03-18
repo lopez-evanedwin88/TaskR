@@ -10,7 +10,7 @@ import {loginRequest} from '../../redux/login/actions';
 import { Route } from '../../constants/Route';
 
 const LoginScreen = ({navigation}: {navigation: any}) => {
-  // const [staff_id, setStaffId] = useState('grainbird4@google.com.br');
+  // const [staff_id, setStaffId] = useState('005');
   // const [password, setPassword] = useState('test123');
   const [staff_id, setStaffId] = useState('');
   const [password, setPassword] = useState('');
