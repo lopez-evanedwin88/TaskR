@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   Image,
+  ScrollView,
 } from 'react-native';
 import externalStyle1 from '../LoginScreen/styles';
 import globalStyles from '../../styles/GlobalStyles';
@@ -105,140 +106,146 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <View
-      style={[
-        globalStyles.flex1,
-        {
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-      ]}>
-      <View>
-        <Text style={[{fontSize: fonts.xxxlg}, globalStyles.padding10]}>
-          Create a Task
-        </Text>
-      </View>
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+      contentInsetAdjustmentBehavior='always'>
       <View
         style={[
-          globalStyles.flexDirectionRow,
-          externalStyle1.txtInputStyleView,
+          globalStyles.flex1,
+          {
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
         ]}>
-        <TextInput
-          placeholder="Title or name of the task"
-          style={externalStyle1.txtInputStyle}
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          value={title}
-          onChangeText={setTitle}
-        />
-      </View>
-      <View
-        style={[
-          globalStyles.flexDirectionRow,
-          externalStyle1.txtInputStyleView,
-        ]}>
-        <TextInput
-          placeholder="Brief details on task"
-          style={externalStyle1.txtInputStyle}
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          value={description}
-          onChangeText={setDescription}
-        />
-      </View>
-      <View
-        style={[
-          {alignSelf: 'flex-start', paddingLeft: 20, alignItems: 'center'},
-          globalStyles.padding10,
-          globalStyles.flexDirectionRow,
-        ]}>
-        <Text style={[{fontSize: fonts.xxlg}]}>Upload Image:</Text>
-        <TextButton
-          title="+"
-          onPress={() => {
-            handleChoosePhoto();
-          }}
-        />
-      </View>
-      <View
-        style={{
-          alignSelf: 'flex-start',
-          paddingLeft: 20,
-        }}>
-        {renderMedia()}
-      </View>
-      <View
-        style={[
-          {alignSelf: 'flex-start', paddingLeft: 20},
-          globalStyles.padding10,
-        ]}>
-        <Text style={[{fontSize: fonts.xxlg}]}>Set Timeline</Text>
-      </View>
-      <View
-        style={[
-          globalStyles.flexDirectionRow,
-          externalStyle1.txtInputStyleView,
-        ]}>
-        <TextInput
-          value={startDate}
-          placeholder="Start Date"
-          style={[externalStyle1.txtInputStyle, {paddingRight: 0}]}
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          editable={false}
-          onPressIn={() => {
-            setDisplayPicker(true);
-            setWhichDatePicked(true);
-            setSelectedDate(startDate);
-          }}
-        />
-        <TextInput
-          value={endDate}
-          placeholder="Due Date"
-          style={[externalStyle1.txtInputStyle, {paddingRight: 0}]}
-          autoCorrect={false}
-          autoCapitalize={'none'}
-          editable={false}
-          onPressIn={() => {
-            setDisplayPicker(true);
-            setWhichDatePicked(false);
-            setSelectedDate(endDate);
-          }}
-        />
-      </View>
-      {displayPicker && (
-        <>
-          <DateTimePicker
-            value={new Date(selectedDate)}
-            mode="datetime"
-            display="spinner"
-            onChange={setDate}
+        <View>
+          <Text style={[{fontSize: fonts.xxxlg}, globalStyles.padding10]}>
+            Create a Task
+          </Text>
+        </View>
+        <View
+          style={[
+            globalStyles.flexDirectionRow,
+            externalStyle1.txtInputStyleView,
+          ]}>
+          <TextInput
+            placeholder="Title or name of the task"
+            style={externalStyle1.txtInputStyle}
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            value={title}
+            onChangeText={setTitle}
           />
+        </View>
+        <View
+          style={[
+            globalStyles.flexDirectionRow,
+            externalStyle1.txtInputStyleView,
+          ]}>
+          <TextInput
+            placeholder="Brief details on task"
+            style={externalStyle1.txtInputStyle}
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            value={description}
+            onChangeText={setDescription}
+          />
+        </View>
+        <View
+          style={[
+            {alignSelf: 'flex-start', paddingLeft: 20, alignItems: 'center'},
+            globalStyles.padding10,
+            globalStyles.flexDirectionRow,
+          ]}>
+          <Text style={[{fontSize: fonts.xxlg}]}>Upload Image:</Text>
           <TextButton
-            title="SET"
+            title="+"
             onPress={() => {
-              setDisplayPicker(false);
-              setSelectedDate('');
+              handleChoosePhoto();
             }}
           />
-          <View
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-              width: '90%',
-            }}></View>
-        </>
-      )}
-      <View style={[globalStyles.padding8, globalStyles.flexDirectionRow]}>
-        <Button
-          title="Create"
-          onPress={() => {
-            insertTaskApi();
-          }}
-          style={globalStyles.flex1}
-        />
+        </View>
+        <View
+          style={{
+            alignSelf: 'flex-start',
+            paddingLeft: 20,
+          }}>
+          {renderMedia()}
+        </View>
+        <View
+          style={[
+            {alignSelf: 'flex-start', paddingLeft: 20},
+            globalStyles.padding10,
+          ]}>
+          <Text style={[{fontSize: fonts.xxlg}]}>Set Timeline</Text>
+        </View>
+        <View
+          style={[
+            globalStyles.flexDirectionRow,
+            externalStyle1.txtInputStyleView,
+          ]}>
+          <TextInput
+            value={startDate}
+            placeholder="Start Date"
+            style={[externalStyle1.txtInputStyle, {paddingRight: 0}]}
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            editable={false}
+            onPressIn={() => {
+              setDisplayPicker(true);
+              setWhichDatePicked(true);
+              setSelectedDate(startDate);
+            }}
+          />
+          <TextInput
+            value={endDate}
+            placeholder="Due Date"
+            style={[externalStyle1.txtInputStyle, {paddingRight: 0}]}
+            autoCorrect={false}
+            autoCapitalize={'none'}
+            editable={false}
+            onPressIn={() => {
+              setDisplayPicker(true);
+              setWhichDatePicked(false);
+              setSelectedDate(endDate);
+            }}
+          />
+        </View>
+        {displayPicker && (
+          <>
+            <DateTimePicker
+              value={new Date(selectedDate)}
+              mode="datetime"
+              display="spinner"
+              onChange={setDate}
+            />
+            <TextButton
+              title="SET"
+              onPress={() => {
+                setDisplayPicker(false);
+                setSelectedDate('');
+              }}
+            />
+            <View
+              style={{
+                borderBottomColor: 'black',
+                borderBottomWidth: StyleSheet.hairlineWidth,
+                width: '90%',
+              }}></View>
+          </>
+        )}
+        <View style={[globalStyles.padding8, globalStyles.flexDirectionRow]}>
+          <Button
+            title="Create"
+            onPress={() => {
+              insertTaskApi();
+            }}
+            style={globalStyles.flex1}
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
