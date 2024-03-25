@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/types';
 import {insertTaskRequest, tasksRequest} from '../../redux/task/actions';
 import * as ImagePicker from 'react-native-image-picker';
+import Video from 'react-native-video';
 import styles from './styles';
 
 const TaskScreen = ({navigation}: {navigation: any}) => {
@@ -32,6 +33,7 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
   const [whichDatePicked, setWhichDatePicked] = useState(true);
   const [selectedDate, setSelectedDate] = useState('');
   const [mediaUri, setMediaUri] = useState(null);
+  const [mediaType, setMediaType] = useState('');
   const [photo, setPhoto] = useState(null);
 
   const dispatch = useDispatch();
@@ -79,9 +81,27 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
         } else {
           setPhoto(response as any);
           setMediaUri((response as any).assets[0].uri);
+          setMediaType((response as any).assets[0].type);
         }
       },
     );
+  };
+
+  const renderMedia = () => {
+    if (mediaUri && mediaType.includes('video')) {
+      return (
+        <Video
+          source={{uri: mediaUri}}
+          style={styles.media}
+          controls={true}
+          resizeMode="contain"
+        />
+      );
+    } else if (mediaUri && mediaType.includes('image')) {
+      return <Image source={{uri: mediaUri}} style={styles.media} />;
+    } else {
+      return <Text style={{color: 'red'}}>No media selected</Text>;
+    }
   };
 
   return (
@@ -145,7 +165,7 @@ const TaskScreen = ({navigation}: {navigation: any}) => {
           alignSelf: 'flex-start',
           paddingLeft: 20,
         }}>
-        {mediaUri && <Image source={{uri: mediaUri}} style={styles.media} />}
+        {renderMedia()}
       </View>
       <View
         style={[

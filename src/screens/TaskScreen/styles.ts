@@ -2,8 +2,8 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   media: {
-    width: 100,
-    height: 100,
+    width: 300,
+    height: 200,
     marginBottom: 5,
     alignSelf: 'flex-end',
   },

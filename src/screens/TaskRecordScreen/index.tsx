@@ -24,6 +24,7 @@ import {
 import * as ImagePicker from 'react-native-image-picker';
 import {updateTaskStatusRequest} from '../../redux/task/actions';
 import {Status} from '../../constants/Status';
+import Video from 'react-native-video';
 
 const TaskRecordScreen = ({
   navigation,
@@ -34,6 +35,7 @@ const TaskRecordScreen = ({
 }) => {
   const [lTaskRecords, setlTaskRecords] = useState([]);
   const [mediaUri, setMediaUri] = useState(null);
+  const [mediaType, setMediaType] = useState('');
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
   const [photo, setPhoto] = useState(null);
@@ -78,6 +80,7 @@ const TaskRecordScreen = ({
         } else {
           setPhoto(response as any);
           setMediaUri((response as any).assets[0].uri);
+          setMediaType((response as any).assets[0].type);
         }
       },
     );
@@ -129,6 +132,23 @@ const TaskRecordScreen = ({
       </View>
     </TouchableOpacity>
   );
+
+  const renderMedia = () => {
+    if (mediaUri && mediaType.includes('video')) {
+      return (
+        <Video
+          source={{uri: mediaUri}}
+          style={styles.media}
+          controls={true}
+          resizeMode="contain"
+        />
+      );
+    } else if (mediaUri && mediaType.includes('image')) {
+      return <Image source={{uri: mediaUri}} style={styles.media} />;
+    } else {
+      return <Text style={{color: 'red'}}>No media selected</Text>;
+    }
+  };
 
   return (
     <View style={[globalStyles.flex1, {backgroundColor: color.white}]}>
@@ -234,7 +254,7 @@ const TaskRecordScreen = ({
           alignSelf: 'flex-start',
           paddingLeft: 20,
         }}>
-        {mediaUri && <Image source={{uri: mediaUri}} style={styles.media} />}
+        {renderMedia()}
       </View>
       <View style={[globalStyles.flexDirectionRow, {paddingHorizontal: 10}]}>
         <TextInput
