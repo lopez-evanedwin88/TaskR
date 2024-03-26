@@ -45,6 +45,9 @@ const TaskRecordScreen = ({
   const {taskRecords, status, response} = useSelector(
     (state: RootState) => state.taskRecord,
   );
+  const {status: taskStatus, response: taskResponse} = useSelector(
+    (state: RootState) => state.task,
+  );
   const {user} = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -61,6 +64,13 @@ const TaskRecordScreen = ({
       navigation.goBack();
     }
   }, [status, response]);
+
+  useEffect(() => {
+    if (taskStatus === 200) {
+      Alert.alert('Task has been assigned', response as string);
+      navigation.goBack();
+    }
+  }, [taskStatus, taskResponse]);
 
   useEffect(() => {
     setlTaskRecords([]);

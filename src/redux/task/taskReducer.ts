@@ -15,7 +15,7 @@ export interface TaskState {
   tasks: [] | null;
   loading: boolean;
   error: string | null;
-  status: string | null;
+  status: any | null;
   response: string | null;
 }
 
