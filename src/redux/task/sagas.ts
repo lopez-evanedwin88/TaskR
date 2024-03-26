@@ -107,7 +107,6 @@ function* updateTaskStatus(action: any): any {
   const taskFormData = new FormData();
   taskFormData.append('status', status);
   taskFormData.append('assignee_id', assignee_id);
-  console.log('wew', action.payload)
 
   try {
     const callResponse = yield call(fetch, `${BASE_URL}/task/update_task_status/${task_id}`, {
