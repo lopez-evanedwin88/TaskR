@@ -24,7 +24,7 @@ const authReducer = (state = initialState, action: any): AuthState => {
       return {
         ...state,
         loading: false,
-        user: action.payload.user,
+        user: action.payload,
       };
     case LOGIN_FAILURE:
       return {

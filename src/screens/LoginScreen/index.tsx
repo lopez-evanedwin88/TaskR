@@ -37,6 +37,12 @@ const LoginScreen = ({navigation}: {navigation: any}) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Incorrect staff id or password', error as string);
+    }
+  }, [error]);
+
   return (
     <View
       style={[

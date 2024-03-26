@@ -1,8 +1,8 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-import { LOGIN_REQUEST, loginSuccess, loginFailure } from './actions';
-import { BASE_URL } from '../../constants/Base';
+import {call, put, takeLatest} from 'redux-saga/effects';
+import {LOGIN_REQUEST, loginSuccess, loginFailure} from './actions';
+import {BASE_URL} from '../../constants/Base';
 
-function* login(action: any):any {
+function* login(action: any): any {
   try {
     const formData = new FormData();
     formData.append('staff_id', action.payload.staff_id);
@@ -17,8 +17,13 @@ function* login(action: any):any {
       throw new Error('Login failed');
     }
 
-    const user = yield response.json();
-    yield put(loginSuccess(user));
+    const {status, user, response: loginResponse} = yield response.json();
+    
+    if (status) {
+      yield put(loginSuccess(user));
+    } else {
+      yield put(loginFailure(loginResponse));
+    }
   } catch (error) {
     yield put(loginFailure((error as any).message));
   }
