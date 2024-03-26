@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -16,18 +16,21 @@ import {clearResponse, tasksRequest} from '../../redux/task/actions';
 import {clearResponse as clearResponseTaskRecord} from '../../redux/taskRecord/actions';
 import {RootState} from '../../redux/types';
 import {Route} from '../../constants/Route';
+import { useIsFocused } from '@react-navigation/native';
 
 const MainScreen = ({navigation}: {navigation: any}) => {
   const [lTasks, setlTasks] = useState([]);
   const dispatch = useDispatch();
   const {tasks} = useSelector((state: RootState) => state.task);
   const {user} = useSelector((state: RootState) => state.auth);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    retrieveTasks();
-  }, []);
+    isFocused && retrieveTasks();
+  }, [isFocused]);
 
   useEffect(() => {
+    setlTasks([]);
     tasks && tasks.length > 0 && setlTasks(tasks);
   }, [tasks]);
 
